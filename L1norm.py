@@ -7,5 +7,5 @@ def L1Norm(Dict1 , Dict2):
     Point1= np.array(normalize(P1))
     Point2 = np.array(normalize(P2))
     
-    return L1norm = numpy.linalg.norm((Point1 - Point2), ord=1)
-
+    L1norm = numpy.linalg.norm((Point1 - Point2), ord=1)
+    return L1norm
