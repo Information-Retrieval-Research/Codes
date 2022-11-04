@@ -41,6 +41,6 @@ def lcs_algo(S1, S2, m, n):
             j -= 1
             
     # Printing the sub sequences
-    return "".join(lcs_algo)
-    # return result
+    result "".join(lcs_algo)
+    return result
 
