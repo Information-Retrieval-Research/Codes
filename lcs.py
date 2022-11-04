@@ -44,17 +44,3 @@ def lcs_algo(S1, S2, m, n):
     return "".join(lcs_algo)
     # return result
 
-with open('/gdrive/My Drive/IR Research/Corpus/Spanish/spanishCorpusSmallest.txt', 'r' , encoding = "ISO-8859-1") as f1:
-    S1 = f1.read()
-with open('/gdrive/My Drive/IR Research/Corpus/Spanish/spanishCorpusSmallest.txt', 'r' , encoding = "ISO-8859-1") as f2:
-    S2 = f2.read()
-m = len(S1)
-n = len(S2)
-lcs_algo(S1, S2, m, n)
-
-S1 = "ACADB"
-S2 = "CBDA"
-m = len(S1)
-n = len(S2)
-print(lcs_algo(S1, S2, m, n))
-
