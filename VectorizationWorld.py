@@ -1,3 +1,5 @@
+import time
+from progress.bar import IncrementalBar
 import epitran
 from epitran.backoff import Backoff
 
