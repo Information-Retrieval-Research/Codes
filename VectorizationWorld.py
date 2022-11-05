@@ -60,7 +60,7 @@ with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_
 
 
 for language in language_list:
-    print(f"Working on {language}...")
+    print("Working on " + language)
     from_link = f"../Corpus/Languages/{language}/{language}.txt"
     to_link = f"../Corpus/Languages/{language}/IPA.txt"
 
@@ -77,7 +77,7 @@ for language in language_list:
     trigram = {}
     word_count = 0
     combined_tokenized_array = []
-    print("Converting text to IPA...")
+    print("Converting text to IPA")
     text1 = text.split(" ")
     bar = IncrementalBar('Countdown', max = len(text1))
     to_file_string = ""
