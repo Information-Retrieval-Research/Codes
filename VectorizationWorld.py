@@ -71,6 +71,7 @@ for language in language_list:
     from_file = open(from_link, 'r', encoding="utf-8")
     to_file = open(to_link, 'a', encoding="utf-8")
     text = from_file.read()
+    from_file.close()
 
     unigram = {}
     bigram = {}
@@ -119,25 +120,32 @@ for language in language_list:
 
     print("Writing to file")
     to_file.write(to_file_string)
+    to_file.close()
     print("Writing to file finished")
 
     unigram_file = open(to_unigram_link, 'w', encoding="utf-8")
     for token in unigram:
         unigram_file.write(token+','+str(unigram[token])+'\n')
+    unigram_file.close()
 
     bigram_file = open(to_bigram_link, 'w', encoding="utf-8")
     for token in bigram:
         bigram_file.write(token+','+str(bigram[token])+'\n')
+    bigram_file.close()
 
     trigram_file = open(to_trigram_link, 'w', encoding="utf-8")
     for token in trigram:
         trigram_file.write(token+','+str(trigram[token])+'\n')
+    trigram_file.close()
+    
 
     no_of_phonemes = open(
         f"../Output/Languages/{language}/no_phonemes.txt", 'w', encoding="utf-8")
     no_of_phonemes.write(str(len(unigram)))
+    no_of_phonemes.close()
 
     word_counter = open(
         f"../Output/Languages/{language}/word_count.txt", 'w', encoding="utf-8")
     word_counter.write(str(word_count))
+    word_counter.close()
     
