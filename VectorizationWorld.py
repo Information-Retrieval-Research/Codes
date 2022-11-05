@@ -2,6 +2,7 @@ import time
 from progress.bar import IncrementalBar
 import epitran
 from epitran.backoff import Backoff
+import time
 
 language_list = {"Amharic" :["amh-Ethi","amh-Ethi-pp","amh-Ethi-red"],
 "Arabic":["ara-Arab"],
@@ -37,7 +38,7 @@ language_list = {"Amharic" :["amh-Ethi","amh-Ethi-pp","amh-Ethi-red"],
 def word_to_token(word, lang_list):
     backoff = Backoff(lang_list)
 
-    return backoff.trans_list(word)
+    return backoff.transliterate(word)
 
 
 def add_to_dict(dic, elem):
@@ -79,13 +80,19 @@ for language in language_list:
     print("Converting text to IPA...")
     text1 = text.split(" ")
     bar = IncrementalBar('Countdown', max = len(text1))
+    to_file_string = ""
+
+    backoff = Backoff(language_list[language])
 
     for word in text1:
+        
         word_count += 1
-        tokenized_array = word_to_token(word, language_list[language])
+        tokenized_array = backoff.trans_list(word)
         s = ''.join(tokenized_array)
         combined_tokenized_array.extend(tokenized_array)
-        to_file.write(' ' + s)
+        to_file_string += " " + s
+        # to_file.write(' ' + s)
+        
 
         # TO Write to the global list of unique token
         for token in tokenized_array:
@@ -109,17 +116,22 @@ for language in language_list:
                 trigram = add_to_dict(trigram, token)
         bar.next()
     bar.finish()
+
+    print("Writing to file")
+    to_file.write(to_file_string)
+    print("Writing to file finished")
+
     unigram_file = open(to_unigram_link, 'w', encoding="utf-8")
     for token in unigram:
-        unigram_file.write(token+','+unigram[token]+'\n')
+        unigram_file.write(token+','+str(unigram[token])+'\n')
 
     bigram_file = open(to_bigram_link, 'w', encoding="utf-8")
     for token in bigram:
-        bigram_file.write(token+','+unigram[token]+'\n')
+        bigram_file.write(token+','+str(bigram[token])+'\n')
 
     trigram_file = open(to_trigram_link, 'w', encoding="utf-8")
     for token in trigram:
-        trigram_file.write(token+','+unigram[token]+'\n')
+        trigram_file.write(token+','+str(trigram[token])+'\n')
 
     no_of_phonemes = open(
         f"../Output/Languages/{language}/no_phonemes.txt", 'w', encoding="utf-8")
