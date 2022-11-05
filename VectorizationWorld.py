@@ -46,15 +46,18 @@ def add_to_dict(dic, elem):
     return dic
 
 
-global_token_list_link = f"IPA.txt"
-with open(global_token_list_link, 'r', encoding="utf-8") as global_token_list_file:
-    init_global_string = global_token_list_file.read()
-    global_token_list_file.truncate(0)
-    global_list = init_global_string.split(",")
-    global_set = set(global_list.extend(tokenized_array))
+global_token_list_link = "IPA.txt"
+global_set = set()
+with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_file:
+  init_global_string = global_token_list_file.read()
+  # global_token_list_file.truncate(0)
+  global_list = init_global_string.split(",")
+  for i in global_list:
+    global_set.add(i)
 
 
 for language in language_list:
+    print(f"Working on {language}...")
     from_link = f"../Corpus/Languages/{language}/{language}.txt"
     to_link = f"../Corpus/Languages/{language}/IPA.txt"
 
@@ -71,8 +74,11 @@ for language in language_list:
     trigram = {}
     word_count = 0
     combined_tokenized_array = []
+    print("Converting text to IPA...")
+    text1 = text.split(" ")
+    bar = IncrementalBar('Countdown', max = len(text1))
 
-    for word in text.split(" "):
+    for word in text1:
         word_count += 1
         tokenized_array = word_to_token(word, language_list[language])
         s = ''.join(tokenized_array)
@@ -99,7 +105,8 @@ for language in language_list:
                 token = tokenized_array[i-2] + \
                     tokenized_array[i-1] + tokenized_array[i]
                 trigram = add_to_dict(trigram, token)
-
+        bar.next()
+    bar.finish()
     unigram_file = open(to_unigram_link, 'w', encoding="utf-8")
     for token in unigram:
         unigram_file.write(token+','+unigram[token]+'\n')
@@ -113,6 +120,10 @@ for language in language_list:
         trigram_file.write(token+','+unigram[token]+'\n')
 
     no_of_phonemes = open(
-        f"../Corpus/Languages/{language}/no_phonemes.txt", 'w', encoding="utf-8")
+        f"../Output/Languages/{language}/no_phonemes.txt", 'w', encoding="utf-8")
     no_of_phonemes.write(str(len(unigram)))
+
+    word_counter = open(
+        f"../Output/Languages/{language}/word_count.txt", 'w', encoding="utf-8")
+    word_counter.write(str(word_count))
     
