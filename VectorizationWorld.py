@@ -5,20 +5,20 @@ from epitran.backoff import Backoff
 import time
 
 language_list = {
-# "Amharic" :["amh-Ethi","amh-Ethi-pp","amh-Ethi-red"],
-# "Arabic":["ara-Arab"],
-# "Cebuano":["ceb-Latn"],
-# "Croatian":["hrv-Latn"],
-# "Czech":["ces-Latn"],
-# "Dutch":["nld-Latn"],
-# "Farsi":["fas-Arab"],
-# "French":["fra-Latn","fra-Latn-np","fra-Latn-p"],
-# "German":["deu-Latn","deu-Latn-np","deu-Latn-nar"],
-# "Hausa":["hau-Latn"],
-# "Hindi":["hin-Deva"],
-# "Hungarian":["hun-Latn"],
-# "Indonesian":["ind-Latn"],
-# "Kazakh":["kaz-Cyrl-bab","kaz-Cyrl","kaz-Latn"],
+"Amharic" :["amh-Ethi","amh-Ethi-pp","amh-Ethi-red"],
+"Arabic":["ara-Arab"],
+"Cebuano":["ceb-Latn"],
+"Croatian":["hrv-Latn"],
+"Czech":["ces-Latn"],
+"Dutch":["nld-Latn"],
+"Farsi":["fas-Arab"],
+"French":["fra-Latn","fra-Latn-np","fra-Latn-p"],
+"German":["deu-Latn","deu-Latn-np","deu-Latn-nar"],
+"Hausa":["hau-Latn"],
+"Hindi":["hin-Deva"],
+"Hungarian":["hun-Latn"],
+"Indonesian":["ind-Latn"],
+"Kazakh":["kaz-Cyrl-bab","kaz-Cyrl","kaz-Latn"],
 "Malayalam":["mal-Mlym"],
 "Maori":["mri-Latn"],
 "Marathi":["mar-Deva"],
@@ -52,12 +52,12 @@ def add_to_dict(dic, elem):
 
 global_token_list_link = "IPA.txt"
 global_set = set()
-with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_file:
-  init_global_string = global_token_list_file.read()
-  # global_token_list_file.truncate(0)
-  global_list = init_global_string.split(",")
-  for i in global_list:
-    global_set.add(i)
+# with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_file:
+#   init_global_string = global_token_list_file.read()
+#   # global_token_list_file.truncate(0)
+#   global_list = init_global_string.split(",")
+#   for i in global_list:
+#     global_set.add(i)
 
 
 for language in language_list:
@@ -87,7 +87,13 @@ for language in language_list:
     backoff = Backoff(language_list[language])
 
     for word in text1:
+        word = word.replace('"', '').replace("'", "").replace("(", "").replace(")", "").replace("[", "").replace("]", "").replace("`", "")
+        word = word.replace(";", "").replace(":", "").replace("!", "").replace(".", "").replace("“", "").replace("’", "").replace("”", "")
+        word = word.replace("-", "").replace("_", "").replace(",", "").replace("?", "")
+        for i in range (0,10):
+          word = word.replace(str(i), '')
         
+
         word_count += 1
         tokenized_array = backoff.trans_list(word)
         s = ''.join(tokenized_array)
@@ -149,4 +155,8 @@ for language in language_list:
         f"../Output/Languages/{language}/word_count.txt", 'w', encoding="utf-8")
     word_counter.write(str(word_count))
     word_counter.close()
+
+
+with open(global_token_list_link, 'w' ,encoding = "utf-8") as global_token_list_file:
+  global_token_list_file.write(str(global_set))
     
