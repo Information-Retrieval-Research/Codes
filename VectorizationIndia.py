@@ -5,11 +5,11 @@ from epitran.backoff import Backoff
 import time
 
 language_list = {
-    # "Bengali": ["ben-Beng", "ben-Beng-red"],
-    # "Hindi": ["hin-Deva"],
-    # "Malayalam": ["mal-Mlym"],
-    # "Marathi": ["mar-Deva"],
-    # "Oriya": ["ori-Orya"],
+    "Bengali": ["ben-Beng", "ben-Beng-red"],
+    "Hindi": ["hin-Deva"],
+    "Malayalam": ["mal-Mlym"],
+    "Marathi": ["mar-Deva"],
+    "Oriya": ["ori-Orya"],
     "Punjabi": ["pan-Guru"],
     "Tamil": ["tam-Taml", "tam-Taml-red"],
     "Telugu": ["tel-Telu"],
@@ -31,7 +31,7 @@ def add_to_dict(dic, elem):
     return dic
 
 
-global_token_list_link = "IPA.txt"
+global_token_list_link = "IPA02.csv"
 global_set = set()
 # with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_file:
 #   init_global_string = global_token_list_file.read()
@@ -69,11 +69,11 @@ for language in language_list:
 
     for word in text1:
         word = word.replace('"', '').replace("'", "").replace(
-            "(", "").replace(")", "").replace("[", "").replace("]", "").replace("`", "")
+            "(", "").replace(")", "").replace("[", "").replace("]", "").replace("`", "").replace(".", "")
         word = word.replace(";", "").replace(":", "").replace("!", "").replace(
-            ".", "").replace("“", "").replace("’", "").replace("”", "")
+            ".", "").replace("“", "").replace("’", "").replace("”", "").replace("~", "")
         word = word.replace("-", "").replace("_",
-                                             "").replace(",", "").replace("?", "").replace("_", "").replace("-", "")
+                                             "").replace(",", "").replace("?", "").replace("_", "").replace("-", "").replace("+", "").replace("=", "")
         for i in range(0, 10):
             word = word.replace(str(i), '')
         new_word = ""
@@ -81,33 +81,34 @@ for language in language_list:
             if ((ord(word[i]) < 97 or ord(word[i]) > 123) and (ord(word[i]) < 65 or ord(word[i]) >= 91)):
                 new_word += word[i]
         word = new_word
-        word_count += 1
-        tokenized_array = backoff.trans_list(word)
-        s = ''.join(tokenized_array)
-        combined_tokenized_array.extend(tokenized_array)
-        to_file_string += " " + s
-        # to_file.write(' ' + s)
+        if (word):
+            word_count += 1
+            tokenized_array = backoff.trans_list(word)
+            s = ''.join(tokenized_array)
+            combined_tokenized_array.extend(tokenized_array)
+            to_file_string += " " + s
+            # to_file.write(' ' + s)
 
-        # TO Write to the global list of unique token
-        for token in tokenized_array:
-            global_set.add(token)
+            # TO Write to the global list of unique token
+            for token in tokenized_array:
+                global_set.add(token)
 
-        # Create Unigram
-        for token in tokenized_array:
-            unigram = add_to_dict(unigram, token)
+            # Create Unigram
+            for token in tokenized_array:
+                unigram = add_to_dict(unigram, token)
 
-        # Create Bigram
-        for i in range(len(tokenized_array)):
-            if i >= 1:
-                token = tokenized_array[i-1] + tokenized_array[i]
-                bigram = add_to_dict(bigram, token)
+            # Create Bigram
+            for i in range(len(tokenized_array)):
+                if i >= 1:
+                    token = tokenized_array[i-1] + tokenized_array[i]
+                    bigram = add_to_dict(bigram, token)
 
-        # Create trigram
-        for i in range(len(tokenized_array)):
-            if i >= 2:
-                token = tokenized_array[i-2] + \
-                    tokenized_array[i-1] + tokenized_array[i]
-                trigram = add_to_dict(trigram, token)
+            # Create trigram
+            for i in range(len(tokenized_array)):
+                if i >= 2:
+                    token = tokenized_array[i-2] + \
+                        tokenized_array[i-1] + tokenized_array[i]
+                    trigram = add_to_dict(trigram, token)
         bar.next()
     bar.finish()
 
