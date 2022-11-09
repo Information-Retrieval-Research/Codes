@@ -17,12 +17,6 @@ language_list = {
 }
 
 
-def word_to_token(word, lang_list):
-    backoff = Backoff(lang_list)
-
-    return backoff.transliterate(word)
-
-
 def add_to_dict(dic, elem):
     if elem in dic:
         dic[elem] += 1
@@ -81,7 +75,7 @@ for language in language_list:
             if ((ord(word[i]) < 97 or ord(word[i]) > 123) and (ord(word[i]) < 65 or ord(word[i]) >= 91)):
                 new_word += word[i]
         word = new_word
-        if (word):
+        if (word != ""):
             word_count += 1
             tokenized_array = backoff.trans_list(word)
             s = ''.join(tokenized_array)
