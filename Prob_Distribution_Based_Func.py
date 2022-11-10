@@ -97,9 +97,16 @@ def rao(dict1, dict2):
 
 def dot_product(dict1, dict2):
     dot_prod = 0
+    root1 = 0
+    root2 = 0
     for i in dict1.keys():
-        dot_prod += float(dict1[i])*float(dict2[i])
-    return math.acos(dot_prod)
+        dot_prod += dict1[i]*dict2[i]
+        root1 += dict1[i]**2
+        root2 += dict2[i]**2
+    
+    root1 = math.sqrt(root1)
+    root2 = math.sqrt(root2)
+    return dot_prod/(root1*root2)
 
 
 def normalise(dictionary):
