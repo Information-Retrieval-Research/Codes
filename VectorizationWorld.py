@@ -70,7 +70,7 @@ for language in language_list:
     to_trigram_link = f"../Output/Languages/{language}/trigram.csv"
 
     from_file = open(from_link, 'r', encoding="utf-8")
-    to_file = open(to_link, 'a', encoding="utf-8")
+    to_file = open(to_link, 'w', encoding="utf-8")
     text = from_file.read()
     from_file.close()
 
