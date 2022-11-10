@@ -99,7 +99,7 @@ def dot_product(dict1, dict2):
     dot_prod = 0
     for i in dict1.keys():
         dot_prod += float(dict1[i])*float(dict2[i])
-    return dot_prod
+    return math.acos(dot_prod)
 
 
 def normalise(dictionary):
