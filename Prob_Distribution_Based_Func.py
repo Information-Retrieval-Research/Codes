@@ -90,8 +90,10 @@ def rao(dict1, dict2):
     a = alpha(list1, list2)
     b = beta(list1, list2)
     c = gamma(list1, list2)
-    D = math.sqrt((a*c-b**2)/a**2)
-
+    if(a):
+      D = math.sqrt((a*c-b**2)/a**2)
+    else:
+      D = "INF"
     return D
 
 
@@ -134,15 +136,36 @@ def equalise(dict1, dict2):
 
 
 language_dict = {
-    "Bengali": ["ben-Beng", "ben-Beng-red"],
+    
+    "Amharic": ["amh-Ethi", "amh-Ethi-pp", "amh-Ethi-red"],
+    "Arabic": ["ara-Arab"],
+    "Cebuano": ["ceb-Latn"],
+    "Croatian": ["hrv-Latn"],
+    "Czech": ["ces-Latn"],
+    "Dutch": ["nld-Latn"],
+    "Farsi": ["fas-Arab"],
+    "French": ["fra-Latn", "fra-Latn-np", "fra-Latn-p"],
+    "German": ["deu-Latn", "deu-Latn-np", "deu-Latn-nar"],
+    "Hausa": ["hau-Latn"],
     "Hindi": ["hin-Deva"],
+    "Hungarian": ["hun-Latn"],
+    "Indonesian": ["ind-Latn"],
+    "Kazakh": ["kaz-Cyrl-bab", "kaz-Cyrl", "kaz-Latn"],
     "Malayalam": ["mal-Mlym"],
+    "Maori": ["mri-Latn"],
     "Marathi": ["mar-Deva"],
-    "Oriya": ["ori-Orya"],
-    "Punjabi": ["pan-Guru"],
-    "Tamil": ["tam-Taml", "tam-Taml-red"],
+    "Polish": ["pol-Latn"],
+    "Porteguese": ["por-Latn"],
+    "Russian": ["rus-Cyrl"],
+    "Somali": ["som-Latn"],
+    "Spanish": ["spa-Latn", "spa-Latn-eu"],
+    "Swedish": ["swe-Latn"],
     "Telugu": ["tel-Telu"],
-    "Urdu": ["urd-Arab"]
+    "Thai": ["tha-Thai"],
+    "Urdu": ["urd-Arab"],
+    "Vietnamese": ["vie-Latn"],
+    "Xhosa": ["xho-Latn"],
+    "Zulu": ["zul-Latn"]
 }
 
 language_list = []
@@ -158,7 +181,7 @@ for gram in gram_list:
     for i in range(0, len(language_list)):
         print("Working with "+language_list[i]+"....")
         f1 = open("../Output/Languages/" +
-                  language_list[i]+"/"+gram+"02.csv", "r", encoding="utf-8")
+                  language_list[i]+"/"+gram+".csv", "r", encoding="utf-8")
         text1 = f1.readlines()
         dict1 = {}
         for lines in text1:
@@ -173,7 +196,7 @@ for gram in gram_list:
     print(gram + " normalised")
 
 to_csv = {"gram": [], "language1": [], "language2": [],
-          "l1": [], "l2": [],  "kl": [], "rao": [], "dot_product": []}
+          "l1": [], "l2": [],  "kl": [], "dot_product": []}
 # to_csv = {"language1": [], "language2": [], "l1": [], "l2": [], "rao": [], "kl": []}
 
 
@@ -192,10 +215,10 @@ for gram in gram_list:
             to_csv["language2"].append(language_list[j])
             to_csv["l1"].append(l1(dict1, dict2))
             to_csv["l2"].append(l2(dict1, dict2))
-            to_csv["rao"].append(rao(dict1, dict2))
+            # to_csv["rao"].append(rao(dict1, dict2))
             to_csv["kl"].append(kl(dict1, dict2))
             to_csv["dot_product"].append(dot_product(dict1, dict2))
 
 to_csv_dataframe = pd.DataFrame.from_dict(to_csv)
 print(to_csv_dataframe)
-to_csv_dataframe.to_csv('prob_distribution_summary02.csv')
+to_csv_dataframe.to_csv('prob_distribution_summary.csv')
