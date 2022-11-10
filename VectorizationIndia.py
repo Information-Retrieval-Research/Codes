@@ -62,6 +62,8 @@ for language in language_list:
     backoff = Backoff(language_list[language])
 
     for word in text1:
+        if word == backoff.transliterate(word):
+          continue
         word = word.replace('"', '').replace("'", "").replace(
             "(", "").replace(")", "").replace("[", "").replace("]", "").replace("`", "").replace(".", "")
         word = word.replace(";", "").replace(":", "").replace("!", "").replace(
