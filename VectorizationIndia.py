@@ -5,41 +5,16 @@ from epitran.backoff import Backoff
 import time
 
 language_list = {
-    "Amharic": ["amh-Ethi", "amh-Ethi-pp", "amh-Ethi-red"],
-    "Arabic": ["ara-Arab"],
-    "Cebuano": ["ceb-Latn"],
-    "Croatian": ["hrv-Latn"],
-    "Czech": ["ces-Latn"],
-    "Dutch": ["nld-Latn"],
-    "Farsi": ["fas-Arab"],
-    "French": ["fra-Latn", "fra-Latn-np", "fra-Latn-p"],
-    "German": ["deu-Latn", "deu-Latn-np", "deu-Latn-nar"],
-    "Hausa": ["hau-Latn"],
+    "Bengali": ["ben-Beng", "ben-Beng-red"],
     "Hindi": ["hin-Deva"],
-    "Hungarian": ["hun-Latn"],
-    "Indonesian": ["ind-Latn"],
-    "Kazakh": ["kaz-Cyrl-bab", "kaz-Cyrl", "kaz-Latn"],
     "Malayalam": ["mal-Mlym"],
-    "Maori": ["mri-Latn"],
     "Marathi": ["mar-Deva"],
-    "Polish": ["pol-Latn"],
-    "Porteguese": ["por-Latn"],
-    "Russian": ["rus-Cyrl"],
-    "Somali": ["som-Latn"],
-    "Spanish": ["spa-Latn", "spa-Latn-eu"],
-    "Swedish": ["swe-Latn"],
+    "Oriya": ["ori-Orya"],
+    "Punjabi": ["pan-Guru"],
+    "Tamil": ["tam-Taml", "tam-Taml-red"],
     "Telugu": ["tel-Telu"],
-    "Thai": ["tha-Thai"],
-    "Urdu": ["urd-Arab"],
-    "Vietnamese": ["vie-Latn"],
-    "Xhosa": ["xho-Latn"],
-    "Zulu": ["zul-Latn"]}
-
-
-def word_to_token(word, lang_list):
-    backoff = Backoff(lang_list)
-
-    return backoff.transliterate(word)
+    "Urdu": ["urd-Arab"]
+}
 
 
 def add_to_dict(dic, elem):
@@ -50,7 +25,7 @@ def add_to_dict(dic, elem):
     return dic
 
 
-global_token_list_link = "IPA.csv"
+global_token_list_link = "IPA02.csv"
 global_set = set()
 # with open(global_token_list_link, 'r' ,encoding = "utf-8") as global_token_list_file:
 #   init_global_string = global_token_list_file.read()
@@ -62,12 +37,12 @@ global_set = set()
 
 for language in language_list:
     print("Working on " + language)
-    from_link = f"../Corpus/Languages/{language}/{language}.txt"
-    to_link = f"../Corpus/Languages/{language}/IPA.txt"
+    from_link = f"../Corpus/Languages/{language}/{language}02.txt"
+    to_link = f"../Corpus/Languages/{language}/IPA02.txt"
 
-    to_unigram_link = f"../Output/Languages/{language}/unigram.csv"
-    to_bigram_link = f"../Output/Languages/{language}/bigram.csv"
-    to_trigram_link = f"../Output/Languages/{language}/trigram.csv"
+    to_unigram_link = f"../Output/Languages/{language}/unigram02.csv"
+    to_bigram_link = f"../Output/Languages/{language}/bigram02.csv"
+    to_trigram_link = f"../Output/Languages/{language}/trigram02.csv"
 
     from_file = open(from_link, 'r', encoding="utf-8")
     to_file = open(to_link, 'a', encoding="utf-8")
@@ -90,12 +65,17 @@ for language in language_list:
         word = word.replace('"', '').replace("'", "").replace(
             "(", "").replace(")", "").replace("[", "").replace("]", "").replace("`", "").replace(".", "")
         word = word.replace(";", "").replace(":", "").replace("!", "").replace(
-            ".", "").replace("“", "").replace("’", "").replace("”", "").replace("=", "")
+            ".", "").replace("“", "").replace("’", "").replace("”", "").replace("~", "")
         word = word.replace("-", "").replace("_",
-                                             "").replace(",", "").replace("?", "").replace("_", "").replace("-", "").replace("+", "").replace("~", "")
+                                             "").replace(",", "").replace("?", "").replace("_", "").replace("-", "").replace("+", "").replace("=", "")
         for i in range(0, 10):
             word = word.replace(str(i), '')
-        if (word):
+        new_word = ""
+        for i in range(0, len(word)):
+            if ((ord(word[i]) < 97 or ord(word[i]) > 123) and (ord(word[i]) < 65 or ord(word[i]) >= 91)):
+                new_word += word[i]
+        word = new_word
+        if (word != ""):
             word_count += 1
             tokenized_array = backoff.trans_list(word)
             s = ''.join(tokenized_array)
@@ -147,12 +127,12 @@ for language in language_list:
     trigram_file.close()
 
     no_of_phonemes = open(
-        f"../Output/Languages/{language}/no_phonemes.txt", 'w', encoding="utf-8")
+        f"../Output/Languages/{language}/no_phonemes02.txt", 'w', encoding="utf-8")
     no_of_phonemes.write(str(len(unigram)))
     no_of_phonemes.close()
 
     word_counter = open(
-        f"../Output/Languages/{language}/word_count.txt", 'w', encoding="utf-8")
+        f"../Output/Languages/{language}/word_count02.txt", 'w', encoding="utf-8")
     word_counter.write(str(word_count))
     word_counter.close()
 
