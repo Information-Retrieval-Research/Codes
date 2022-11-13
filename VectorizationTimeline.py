@@ -1,5 +1,9 @@
 import os
 import sys
+from progress.bar import IncrementalBar
+import epitran
+from epitran.backoff import Backoff
+import time
 
 year_list = ["1720", "1730", "1740", "1750", "1760", "1770", "1780", "1830", "1840", "1850",
              "1860", "1870", "1910", "1920", "1930", "1960", "1970", "1980", "2000", "2010", "2020"]
@@ -10,6 +14,17 @@ walk_dir = "Z:\\Projects\\IR\\Corpus\\English Novels\\"
 #   for file in files:
 #     if (file.split(".")[-1].lower() == 'txt'):
 #       print(file)
+global_token_list_link = "IPA03.csv"
+global_set = set()
+
+
+def add_to_dict(dic, elem):
+    if elem in dic:
+        dic[elem] += 1
+    else:
+        dic[elem] = 1
+    return dic
+
 
 for year in year_list:
     print("Working on " + year)
@@ -25,8 +40,7 @@ for year in year_list:
     combined_tokenized_array = []
     print("Converting text to IPA")
 
-    backoff = Backoff(language_list[language])
-    filter(function, iterable)
+    backoff = Backoff(['eng-Latn'])
 
     for root, subdirs, files in os.walk(walk_dir+year):
         for file in files:
@@ -53,6 +67,8 @@ for year in year_list:
                     if ((ord(word[i]) < 97 or ord(word[i]) > 123) and (ord(word[i]) < 65 or ord(word[i]) >= 91)):
                         new_word += word[i]
                 word = new_word
+                if word == backoff.transliterate(word):
+                    continue
                 if (word != ""):
                     word_count += 1
                     tokenized_array = backoff.trans_list(word)
